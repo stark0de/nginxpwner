@@ -56,14 +56,8 @@ lines = wordlist.readlines()
 invalid = ["404", "403", "301", "302", "429"]
 counter=0
 print(Fore.BLUE+"[?] If the tool reveals the nginx.conf file this is probably because there is no root directive in the nginx.conf file. Get the contents of the file and use https://github.com/yandex/gixy to find more misconfigurations")
-for line in lines:
-    #print(url+"/"+line.strip())
-    discovery = requests.get(url+"/"+line.strip())
-    if discovery.status_code  in ["404","403","301","302","429"]:
-        print(Fore.MAGENTA+"[-] Interesting status code in: "+line+". Status code: "+str(discovery.status_code))
-        counter+=1
-if counter == 0:
-    print(Fore.GREEN+"[+] No interesting results found using the NGINX wordlist")
+print(Fore.WHITE)
+os.system("gobuster dir --url "+url+" -w ./nginx.txt")
 uri_crlf_test= requests.get(url+"/%0d%0aDetectify:%20clrf")
 if "Detectify" in uri_crlf_test.headers:
     print(Fore.RED+"[-] CRLF injection found via $uri or $document_uri parameter with payload: %0d%0aDetectify:%20crlf as URI")
