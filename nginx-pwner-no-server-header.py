@@ -33,7 +33,7 @@ existingfolderpathlist = sys.argv[2]
 basereq = requests.get(url)
 
 print(Fore.WHITE)
-os.system("gobuster dir --url "+url+" -w ./nginx.txt")
+os.system("gobuster dir --url "+url+" -w ./nginx.txt --wildcard")
 uri_crlf_test= requests.get(url+"/%0d%0aDetectify:%20clrf")
 if "Detectify" in uri_crlf_test.headers:
     print(Fore.RED+"[-] CRLF injection found via $uri or $document_uri parameter with payload: %0d%0aDetectify:%20crlf as URI")
