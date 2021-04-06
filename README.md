@@ -7,6 +7,7 @@ Nginxpwner is a simple tool to look for common Nginx misconfigurations and vulne
 ## Install:
 
 ```
+cd /opt
 git clone https://github.com/stark0de/nginxpwner
 cd nginxpwner
 chmod +x install.sh
@@ -27,6 +28,7 @@ Finally:
 python3 nginxpwner.py https://example.com /tmp/pathlist
 ```
 ## Notes:
+
 The tool uses the Server header in the response to do some of the tests. There are other CMS and so which are built on Nginx like Centminmod, OpenResty, Pantheon or Tengine for example which don't return that header. In that case please use nginx-pwner-no-server-header.py with the same parameters than the other script
 
 
