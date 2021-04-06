@@ -51,13 +51,9 @@ if version.parse(target_nginx_version) < version.parse(last_version):
 else:
     print(Fore.GREEN+"[+] NGINX version is up to date")
 
-wordlist = open(os.getcwd()+"/nginx.txt","r")
-lines = wordlist.readlines()
-invalid = ["404", "403", "301", "302", "429"]
-counter=0
 print(Fore.BLUE+"[?] If the tool reveals the nginx.conf file this is probably because there is no root directive in the nginx.conf file. Get the contents of the file and use https://github.com/yandex/gixy to find more misconfigurations")
 print(Fore.WHITE)
-os.system("gobuster dir --url "+url+" -w ./nginx.txt")
+os.system("gobuster dir --url "+url+" -w ./nginx.txt --wildcard")
 uri_crlf_test= requests.get(url+"/%0d%0aDetectify:%20clrf")
 if "Detectify" in uri_crlf_test.headers:
     print(Fore.RED+"[-] CRLF injection found via $uri or $document_uri parameter with payload: %0d%0aDetectify:%20crlf as URI")
