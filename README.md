@@ -18,7 +18,7 @@ chmod +x install.sh
 ```
 Target tab in Burp, select host, right click, copy all URLs in this host, copy to a file
 
-cat urllist | unfurl paths | cut -d"/" -f2-10 > /tmp/pathlist
+cat urllist | unfurl paths | cut -d"/" -f2-3 | sort -u > /tmp/pathlist 
 
 Or get the list of paths you already discovered in the application in some other way. Note: the paths should not start with /
 
