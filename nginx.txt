@@ -48,3 +48,9 @@ nginx_status
 nginx/nginx.conf
 config/nginx.conf
 configuration/nginx.conf
+nginx-status.html
+status.html
+_zstats
+nginx-status.html"-prompt(1)-"
+status.html"-prompt(1)-"
+_zstats"-prompt(1)-"
