@@ -30,9 +30,9 @@ if sys.argv[1].endswith("/"):
 url = sys.argv[1]
 existingfolderpathlist = sys.argv[2]
 
-print(Fore.YELLOW+"[!] IF your enumeration returned any 401 or 403 page, please try doing a request to whatever route and add the header X-Accel-Redirect: /pathwith401or403")
+print(Fore.YELLOW+"[!] IF your enumeration returned any 401 or 403 page, please try making a request to whatever route and add the header X-Accel-Redirect: /pathwith401or403")
 basereq = requests.get(url)
-print(Fore.WHITE)
+print(Fore.WHITE+ "\n\n")
 os.system("gobuster dir --url "+url+" -w ./nginx.txt --wildcard")
 uri_crlf_test= requests.get(url+"/%0d%0aDetectify:%20clrf")
 if "Detectify" in uri_crlf_test.headers:
@@ -71,8 +71,8 @@ elif merge_slashes_winini.status_code == "200" or merge_slashes_winini_old.statu
     print(Fore.RED+"[-] Possible path traversal vulnerability found for insecure merge_slashes setting")
     print(Fore.RED+"[-] Try this to URIs manually: ///../../../../../win.ini and //////../../../../../../win.ini")
 else:
-    print(Fore.GREEN+"[+] No merge_slashes misconfigurations found")
-print(Fore.BLUE+"[?] Testing hop-by-hop headers"+Fore.WHITE)
+    print(Fore.GREEN+"[+] No merge_slashes misconfigurations found\n")
+print(Fore.BLUE+"[?] Testing hop-by-hop headers"+Fore.WHITE+"\n")
 onetwosevendict={}
 localhostdict={}
 oneninetwodict={}
@@ -150,7 +150,7 @@ for x, y in tenzerozerodict.items():
 if counter == 0:
    print("No relevant results for 10.0.0.1 tests")
   
-print(Fore.BLUE+"[?] To test Raw backend reading responses, please make a request with the following contents to Nginx. In case the response is interesting: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#raw-backend-response-reading")
+print("\n"+Fore.BLUE+"[?] To test Raw backend reading responses, please make a request with the following contents to Nginx. In case the response is interesting: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#raw-backend-response-reading")
 a='''
 GET /? XTTP/1.1
 Host: 127.0.0.1
@@ -164,4 +164,4 @@ pathlist = open(existingfolderpathlist, "r")
 pathlines = pathlist.readlines()
 for pathline in pathlines:
     os.system("kyubi "+url+"/"+pathline.strip())
-print(Fore.CYAN+ "[*] More things that you need to test by hand: CORS misconfiguration (ex: bad regex) with tools like Corsy, Host Header injection, Web cache poisoning & Deception in case NGINX is being for caching as well, HTTP request smuggling both normal request smuggling and https://bertjwregeer.keybase.pub/2019-12-10%20-%20error_page%20request%20smuggling.pdf. As well as the rest of typical web vulnerabilities")
+print("\n\n"+Fore.CYAN+ "[*] More things that you need to test by hand: CORS misconfiguration (ex: bad regex) with tools like Corsy, Host Header injection, Web cache poisoning & Deception in case NGINX is being for caching as well, HTTP request smuggling both normal request smuggling and https://bertjwregeer.keybase.pub/2019-12-10%20-%20error_page%20request%20smuggling.pdf. As well as the rest of typical web vulnerabilities")
