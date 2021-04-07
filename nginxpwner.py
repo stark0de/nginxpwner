@@ -165,7 +165,7 @@ for x, y in tenzerozerodict.items():
 if counter == 0:
    print("No relevant results for 10.0.0.1 tests")
 
-res = requests_raw.raw(url="https://api.buckzy.remesasbam.com/", data=b"GET /? XTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n")
+res = requests_raw.raw(url=url+"/", data=b"GET /? XTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n")
 print(Fore.BLUE+"[?] Testing Raw backend reading responses, check in case the response is interesting: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#raw-backend-response-reading")
 print(Fore.WHITE+res.text)
 print(res.headers)
