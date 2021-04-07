@@ -123,7 +123,7 @@ for x, y in onetwosevendict.items():
     r = requests.get(url+"/", headers=z)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
-       print("Difference found  with headers:")
+       print("Difference found with headers:")
        print(r.request.headers)
        counter+=1
 if counter == 0:
@@ -151,7 +151,7 @@ for x, y in oneninetwodict.items():
     r = requests.get(url+"/", headers=z)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
-       print("Difference found in with headers:")
+       print("Difference found with headers:")
        print(r.request.headers)
        counter+=1
 if counter == 0:
@@ -165,7 +165,7 @@ for x, y in tenzerozerodict.items():
     r = requests.get(url+"/", headers=z)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
-       print("Difference found in with headers:")
+       print("Difference found with headers:")
        print(r.request.headers)
        counter+=1
 if counter == 0:
