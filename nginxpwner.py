@@ -28,7 +28,8 @@ if sys.argv[1].endswith("/"):
     sys.exit()
 
 url = sys.argv[1]
-existingfolderpathlist = sys.argv[2]
+existingfolderpathlist = sys.argv[2] 
+
 
 basereq = requests.get(url)
 
@@ -176,5 +177,3 @@ pathlines = pathlist.readlines()
 for pathline in pathlines:
     os.system("kyubi "+url+"/"+pathline.strip())
 print(Fore.CYAN+ "[*] More things that you need to test by hand: CORS misconfiguration (ex: bad regex) with tools like Corsy, Host Header injection, Web cache poisoning & Deception in case NGINX is being for caching as well, HTTP request smuggling both normal request smuggling and https://bertjwregeer.keybase.pub/2019-12-10%20-%20error_page%20request%20smuggling.pdf. As well as the rest of typical web vulnerabilities")
-
-
