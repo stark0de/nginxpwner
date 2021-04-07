@@ -80,11 +80,18 @@ else:
 merge_slashes_req = requests.get(url+"///")
 merge_slashes_etc_passwd_old = requests.get(url+ "///../../../../../etc/passwd")
 merge_slashes_etc_passwd = requests.get(url+ "//////../../../../../../etc/passwd")
+merge_slashes_winini_old = requests.get(url+ "///../../../../../win.ini")
+merge_slashes_winini = requests.get(url+ "//////../../../../../../win.ini")
+ 
 if basereq.status_code == merge_slashes_req and basereq.text == merge_slashes_req.text:
     print(Fore.RED+"[-] Merge slashes set to off. This is useful in case we find an LFI")
 if merge_slashes_etc_passwd.status_code == "200" or merge_slashes_etc_passwd_old.status_code =="200":
     print(Fore.RED+"[-] Possible path traversal vulnerability found for insecure merge_slashes setting")
     print(Fore.RED+"[-] Try this to URIs manually: ///../../../../../etc/passwd and //////../../../../../../etc/passwd")
+   print(Fore.RED+"[-] Merge slashes set to off. This is useful in case we find an LFI")
+elif merge_slashes_winini.status_code == "200" or merge_slashes_winini_old.status_code =="200":
+    print(Fore.RED+"[-] Possible path traversal vulnerability found for insecure merge_slashes setting")
+    print(Fore.RED+"[-] Try this to URIs manually: ///../../../../../win.ini and //////../../../../../../win.ini")
 else:
     print(Fore.GREEN+"[+] No merge_slashes misconfigurations found")
 print(Fore.BLUE+"[?] Testing hop-by-hop headers"+Fore.WHITE)
