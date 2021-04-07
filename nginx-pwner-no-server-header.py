@@ -101,7 +101,7 @@ for x, y in onetwosevendict.items():
     r = requests.get(url+"/", headers=z)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
-       print("Difference found  with headers:")
+       print("Difference found with headers:")
        print(r.request.headers)
        counter+=1
 if counter == 0:
@@ -129,7 +129,7 @@ for x, y in oneninetwodict.items():
     r = requests.get(url+"/", headers=z)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
-       print("Difference found in with headers:")
+       print("Difference found with headers:")
        print(r.request.headers)
        counter+=1
 if counter == 0:
@@ -143,13 +143,13 @@ for x, y in tenzerozerodict.items():
     r = requests.get(url+"/", headers=z)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
-       print("Difference found in with headers:")
+       print("Difference found with headers:")
        print(r.request.headers)
        counter+=1
 if counter == 0:
    print("No relevant results for 10.0.0.1 tests")
   
-print(Fore.BLUE+"[?] To test Raw backend reading responses, please do a request with the following contents to Nginx. In case the response is interesting: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#raw-backend-response-reading")
+print(Fore.BLUE+"[?] To test Raw backend reading responses, please make a request with the following contents to Nginx. In case the response is interesting: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#raw-backend-response-reading")
 a='''
 GET /? XTTP/1.1
 Host: 127.0.0.1
