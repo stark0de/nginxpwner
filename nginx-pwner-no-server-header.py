@@ -6,7 +6,6 @@ from packaging import version
 import os
 import requests_raw
 from colorama import Fore
-import subprocess
 
 banner='''
  _   _  _____  _____  _   _ __   ________  _    _  _   _  _____ ______
@@ -32,7 +31,7 @@ url = sys.argv[1]
 existingfolderpathlist = sys.argv[2]
 
 basereq = requests.get(url)
-
+print(Fore.WHITE)
 os.system("gobuster dir --url "+url+" -w ./nginx.txt --wildcard")
 uri_crlf_test= requests.get(url+"/%0d%0aDetectify:%20clrf")
 if "Detectify" in uri_crlf_test.headers:
@@ -144,7 +143,7 @@ for x, y in tenzerozerodict.items():
 if counter == 0:
    print("No relevant results for 10.0.0.1 tests")
 
-res = requests_raw.raw(url="https://api.buckzy.remesasbam.com/", data=b"GET /? XTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n")
+res = requests_raw.raw(url=url+"/", data=b"GET /? XTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n")
 print(Fore.BLUE+"[?] Testing Raw backend reading responses, check in case the response is interesting: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#raw-backend-response-reading")
 print(Fore.WHITE+res.text)
 print(res.headers)
@@ -156,4 +155,3 @@ pathlines = pathlist.readlines()
 for pathline in pathlines:
     os.system("kyubi "+url+"/"+pathline.strip())
 print(Fore.CYAN+ "[*] More things that you need to test by hand: CORS misconfiguration (ex: bad regex) with tools like Corsy, Host Header injection, Web cache poisoning & Deception in case NGINX is being for caching as well, HTTP request smuggling both normal request smuggling and https://bertjwregeer.keybase.pub/2019-12-10%20-%20error_page%20request%20smuggling.pdf. As well as the rest of typical web vulnerabilities")
-
