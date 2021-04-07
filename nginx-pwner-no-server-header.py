@@ -148,11 +148,14 @@ for x, y in tenzerozerodict.items():
        counter+=1
 if counter == 0:
    print("No relevant results for 10.0.0.1 tests")
-
-res = requests_raw.raw(url=url+"/", data=b"GET /? XTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n")
-print(Fore.BLUE+"[?] Testing Raw backend reading responses, check in case the response is interesting: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#raw-backend-response-reading")
-print(Fore.WHITE+res.text)
-print(res.headers)
+  
+print(Fore.BLUE+"[?] To test Raw backend reading responses, please do a request with the following contents to Nginx. In case the response is interesting: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#raw-backend-response-reading")
+a='''
+GET /? XTTP/1.1
+Host: 127.0.0.1
+Connection: close
+'''
+print(Fore.WHITE+a)
 print(Fore.YELLOW+"[!] If the site uses PHP check for this misconfig: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#script_name and also check this: https://github.com/jas502n/CVE-2019-11043. A last advice, if you happen to have a restricted file upload and you can reach the file you uploaded try making a request to <filename>/whatever.php,and if it executes PHP code it is because the PHP-FastCGI directive is badly configured (this normally only works for older PHP versions)")
 
 print(Fore.BLUE+"[?] Executing Kyubi to check for path traversal vulnerabilities via misconfigured NGINX alias directive"+Fore.WHITE)
