@@ -30,6 +30,7 @@ if sys.argv[1].endswith("/"):
 url = sys.argv[1]
 existingfolderpathlist = sys.argv[2]
 
+print(Fore.YELLOW+"[!] IF your enumeration returned any 401 or 403 page, please try doing a request to whatever route and add the header X-Accel-Redirect: /pathwith401or403")
 basereq = requests.get(url)
 print(Fore.WHITE)
 os.system("gobuster dir --url "+url+" -w ./nginx.txt --wildcard")
