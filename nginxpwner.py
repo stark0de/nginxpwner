@@ -55,6 +55,7 @@ print(Fore.YELLOW+"[!] IF your enumeration returned any 401 or 403 page, please 
 print(Fore.BLUE+"[?] If the tool reveals the nginx.conf file this is probably because there is no root directive in the nginx.conf file. Get the contents of the file and use https://github.com/yandex/gixy to find more misconfigurations")
 print(Fore.WHITE+"\n\n")
 os.system("gobuster dir --url "+url+" -w ./nginx.txt --wildcard")
+print("\n")
 uri_crlf_test= requests.get(url+"/%0d%0aDetectify:%20clrf")
 if "Detectify" in uri_crlf_test.headers:
     print(Fore.RED+"[-] CRLF injection found via $uri or $document_uri parameter with payload: %0d%0aDetectify:%20crlf as URI")
@@ -180,7 +181,7 @@ Connection: close
 print(Fore.WHITE+a)
 
 print(Fore.YELLOW+"[!] If the site uses PHP check for this misconfig: https://book.hacktricks.xyz/pentesting/pentesting-web/nginx#script_name and also check this: https://github.com/jas502n/CVE-2019-11043. A last advice, if you happen to have a restricted file upload and you can reach the file you uploaded try making a request to <filename>/whatever.php,and if it executes PHP code it is because the PHP-FastCGI directive is badly configured (this normally only works for older PHP versions)")
-
+print("\n")
 print(Fore.BLUE+"[?] Executing Kyubi to check for path traversal vulnerabilities via misconfigured NGINX alias directive"+Fore.WHITE)
 pathlist = open(existingfolderpathlist, "r")
 pathlines = pathlist.readlines()
