@@ -88,7 +88,6 @@ if basereq.status_code == merge_slashes_req and basereq.text == merge_slashes_re
 if merge_slashes_etc_passwd.status_code == "200" or merge_slashes_etc_passwd_old.status_code =="200":
     print(Fore.RED+"[-] Possible path traversal vulnerability found for insecure merge_slashes setting")
     print(Fore.RED+"[-] Try this to URIs manually: ///../../../../../etc/passwd and //////../../../../../../etc/passwd")
-   print(Fore.RED+"[-] Merge slashes set to off. This is useful in case we find an LFI")
 elif merge_slashes_winini.status_code == "200" or merge_slashes_winini_old.status_code =="200":
     print(Fore.RED+"[-] Possible path traversal vulnerability found for insecure merge_slashes setting")
     print(Fore.RED+"[-] Try this to URIs manually: ///../../../../../win.ini and //////../../../../../../win.ini")
