@@ -62,7 +62,7 @@ else:
     print(Fore.GREEN+"[+] No CRLF via common misconfiguration found")
 #p = subprocess.Popen('curl -IL -X PURGE -D - "'+url+'"/* | grep HTTP', shell=True, stdout=subprocess.PIPE)
 #output, _ = p.communicate()
-purgemethod=requests.request("PURGE", url+"/", allow_redirects=True)
+purgemethod=requests.request("PURGE", url+"/*", allow_redirects=True)
 #print(purgemethod.text+str(purgemethod.headers)+str(purgemethod.status_code))
 if purgemethod.status_code == 204:
     print(Fore.RED+"[-] Possibly misconfigured PURGE HTTP method (purges the web cache), test this HTTP method manually")
