@@ -59,6 +59,8 @@ It actually checks for:
 
 The tool uses the Server header in the response to do some of the tests. There are other CMS and so which are built on Nginx like Centminmod, OpenResty, Pantheon or Tengine for example which don't return that header. In that case please use nginx-pwner-no-server-header.py with the same parameters than the other script
 
+Also, for the exploit search to run correctly you should do: searchsploit -u in Kali from time to time
+
 The tool does not check for web cache poisoning/deception vulnerabilities nor request smuggling, you should test that with specific tools for those vulnerabilities. NginxPwner is mainly focused in misconfigurations developers may have introduced in the nginx.conf without being aware of them.
 
 Credit to shibli2700 for his awesome tool Kyubi https://github.com/shibli2700/Kyubi and to all the contributors of gobuster. Credits also to Detectify (which actually discovered many of this misconfigurations in NGINX)
