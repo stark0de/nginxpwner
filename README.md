@@ -37,6 +37,8 @@ It actually checks for:
 
 -Checks if it is vulnerable to CRLF via a common misconfiguration of using $uri in redirects
 
+-Checks for CRLF in all of the paths provided
+
 -Checks if the PURGE HTTP method is available from the outside
 
 -Checks for variable leakage misconfiguration
@@ -47,7 +49,13 @@ It actually checks for:
 
 -Uses Kyubi to test for path traversal vulnerabilities via misconfigured alias
 
--Suggests tests in case we find a 401 or a 403 status code, shows the payload to check for Raw backend reading response misconfiguration and suggests some checks in case the site tested uses PHP
+-Tests for 401/403 bypass using X-Accel-Redirect
+
+-Shows the payload to check for Raw backend reading response misconfiguration 
+
+-Checks if the site uses PHP and suggests some nginx-specific tests for PHP sites
+
+-Tests for the common integer overflow vulnerability in Nginx's range filter module (CVE-2017-7529)
 
 The tool uses the Server header in the response to do some of the tests. There are other CMS and so which are built on Nginx like Centminmod, OpenResty, Pantheon or Tengine for example which don't return that header. In that case please use nginx-pwner-no-server-header.py with the same parameters than the other script
 
