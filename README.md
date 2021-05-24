@@ -14,6 +14,19 @@ chmod +x install.sh
 ./install.sh
 ```
 
+## Install using Docker
+```
+git clone https://github.com/stark0de/nginxpwner
+cd nginxpwner
+sudo docker build -t nginxpwner:latest .
+```
+
+Run the image
+```
+sudo docker run -it nginxpwner:latest /bin/bash
+```
+
+
 ## Usage:
 
 ```
