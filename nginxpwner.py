@@ -6,6 +6,8 @@ from packaging import version
 import os
 import requests_raw
 from colorama import Fore
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 banner='''
  _   _  _____  _____  _   _ __   ________  _    _  _   _  _____ ______
