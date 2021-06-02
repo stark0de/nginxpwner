@@ -58,7 +58,7 @@ It actually checks for:
 
 -Checks for path traversal vulnerabilities via merge_slashes set to off
 
--Tests for differences in the length of requests when using hop-by-hop headers (ex: X-Forwarded-Host)
+-Tests for differences in the length of responses when using hop-by-hop headers (ex: X-Forwarded-Host)
 
 -Uses Kyubi to test for path traversal vulnerabilities via misconfigured alias
 
