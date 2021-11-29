@@ -35,7 +35,7 @@ existingfolderpathlist = sys.argv[2]
 
 basereq = requests.get(url, verify=False)
 
-nginx_version = "https://github.com/nginx/nginx/releases"
+nginx_version = "https://github.com/nginx/nginx/tags"
 try:
   target_nginx_version = basereq.headers["Server"].split("/")[1]
 except:
