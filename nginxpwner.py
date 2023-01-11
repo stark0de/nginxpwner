@@ -223,7 +223,11 @@ pathlist3 = open(existingfolderpathlist, "r")
 pathlines = pathlist3.readlines()
 print(f"{Fore.CYAN}\n[?] Testing all provided paths to check to CRLF injection. This is specially interesting if the site uses S3 buckets or GCP to host files")
 for pathline in pathlines:
-    uri_crlf_test= requests.get(f"{url}/{pathline.strip()}%0d%0aDetectify:%20clrf", verify=False)
+    try:
+        uri_crlf_test= requests.get(f"{url}/{pathline.strip()}%0d%0aDetectify:%20clrf", verify=False)
+    except:
+        print(f"{Fore.YELLOW}[!] CRLF test failed on {url}/{pathline.strip()}%0d%0aDetectify:%20clrf")
+        pass
 if "Detectify" in uri_crlf_test.headers:
     print(f"{Fore.RED}[-] CRLF injection found via in URL:{url}/{pathline.strip()} payload: %0d%0aDetectify:%20crlf in URI. If you found any 401 or 403 status code, try injecting X-Accel-Redirect headers in the response or even X-Sendfile")
 
