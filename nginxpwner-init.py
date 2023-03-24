@@ -4,5 +4,5 @@
 from nginxpwner import nginxpwner
 import sys
 
-if __name__ == '__main__':
+if __name__ == '/nginxpwner/nginxpwner.py':
 	__main__.cui(sys.argv[1:])
