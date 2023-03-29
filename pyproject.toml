@@ -1,0 +1,22 @@
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
+
+[tool.setuptools_scm]
+# For smarter version schemes and other configuration options,
+# check out https://github.com/pypa/setuptools_scm
+version_scheme = "no-guess-dev"
+
+[tool.pdm]
+
+[project]
+name = "nginxpwner"
+version = "0.1.0"
+description = "Nginxpwner is a simple tool to look for common Nginx misconfigurations and vulnerabilities."
+authors = [
+    {name = "stark0de", email = "stark0de@changeme.org"},
+]
+dependencies = ["setuptools>=45.0", "requests-raw==0.2.1", "colorama==0.4.4", "requests==2.25.1", "packaging==20.9", "beautifulsoup4==4.9.3", "pyfiglet==0.8.post1", "termcolor==1.1.0", "lxml"]
+readme = "README.md"
+license = {text = "Apache 2.0"}
+requires-python = ">=3.09"

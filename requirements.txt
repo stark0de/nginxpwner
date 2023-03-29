@@ -1,3 +1,4 @@
+setuptools>=45.0
 requests_raw==0.2.1
 colorama==0.4.4
 requests==2.25.1
