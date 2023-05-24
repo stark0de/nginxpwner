@@ -37,7 +37,7 @@ basereq = requests.get(url, verify=False)
 
 nginx_version = "https://github.com/nginx/nginx/tags"
 try:
-  target_nginx_version = basereq.headers["Server"].split("/")[1]
+  target_nginx_version = re.findall(r"\d+\.\d+\.\d+", basereq.headers["Server"])[0]
 except:
   print(f"{Fore.RED}No Server header found or invalid Server header. If you are sure that your target uses Nginx, it may happen either you are testing something built with NGINX or that a simple NGINX server has the server_tokens directive set to off. In any case, please use nginx-pwner-no-server-header.py")
   sys.exit()
