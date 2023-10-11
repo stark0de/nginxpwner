@@ -41,7 +41,7 @@ try:
 except:
   print(f"{Fore.RED}No Server header found or invalid Server header. If you are sure that your target uses Nginx, it may happen either you are testing something built with NGINX or that a simple NGINX server has the server_tokens directive set to off. In any case, please use nginx-pwner-no-server-header.py")
   sys.exit()
-nginx_req = requests.get(nginx_version)
+nginx_req = requests.get(nginx_version, verify=False)
 html=nginx_req.text
 soup = BeautifulSoup(html,'lxml')
 last_version =(soup.findAll('a', attrs={'href': re.compile("^/nginx/nginx/releases/tag")})[0].get('href')).split("-")[1]
