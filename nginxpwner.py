@@ -48,6 +48,7 @@ last_version =(soup.findAll('a', attrs={'href': re.compile("^/nginx/nginx/releas
 
 if version.parse(target_nginx_version) < version.parse(last_version):
     print(f"{Fore.RED}[-] NGINX out of date, current version is: {target_nginx_version} and last version is: {last_version}")
+    print(f"Please be aware that the following potential exploits are not applicable to the Nginx that comes with the LTS host. The LTS version has undergone extra security and stability updates to resolve any vulnerabilities or bugs that may have been identified.")
     print(f"{Fore.RED}[-] All possible exploits will be printed now:")
     os.system(f"searchsploit nginx '{str(target_nginx_version.split('.')[0]+'.'+target_nginx_version.split('.')[1])}'")
     print(f"{Fore.MAGENTA}[-] For the complete list of vulnerabilities check out: https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=nginx")
