@@ -7,7 +7,10 @@ import os
 import requests_raw
 from colorama import Fore
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from fake_useragent import UserAgent
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+useragent = UserAgent()
 
 banner='''
  _   _  _____  _____  _   _ __   ________  _    _  _   _  _____ ______
@@ -36,7 +39,7 @@ basereq = requests.get(url, verify=False)
 
 print(f"{Fore.BLUE}[?] If the tool reveals the nginx.conf file this is probably because there is no root directive in the nginx.conf file. Get the contents of the file and use https://github.com/yandex/gixy to find more misconfigurations")
 print(f"{Fore.WHITE}\n\n")
-os.system(f"gobuster dir -k --url '{url}' -w ./nginx.txt --wildcard --random-agent")
+os.system(f"gobuster -u '{url}' -w ./nginx.txt -k '{useragent.random}'")
 print("\n")
 uri_crlf_test= requests.get(url+"/%0d%0aDetectify:%20clrf", verify=False)
 if "Detectify" in uri_crlf_test.headers:
